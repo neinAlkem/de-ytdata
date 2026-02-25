@@ -1,3 +1,5 @@
+from datetime import date
+
 import requests
 from dotenv import load_dotenv
 import os
@@ -74,7 +76,7 @@ def extract_video_stats(video_ids: list, api_key: str = API_KEY) -> list:
         list: A list of dictionaries containing video statistics.
     """
     stats = []
-    BASE_URL = f'https://youtube.googleapis.com/youtube/v3/videos?part=contentDetails&part=snippet&part=statistics&id=FC53Ht_J1Tk&key={api_key}'
+    BASE_URL = f'https://youtube.googleapis.com/youtube/v3/videos?part=contentDetails&part=snippet&part=statistics&key={api_key}'
     
     def batch_video_ids(video_ids: list, batch_size: int) -> list:
         """Batch video ids into smaller lists.
@@ -118,8 +120,27 @@ def extract_video_stats(video_ids: list, api_key: str = API_KEY) -> list:
     
     except requests.exceptions.RequestException as e:
         raise e
+    
+def save_stats_to_json(stats: list, filename: str) -> None:
+    """Save video statistics to a JSON file.
+
+    Args:
+        stats (list): A list of dictionaries containing video statistics.
+        filename (str): The name of the JSON file to save the statistics to.
+    """
+    filepath = f'{filename}_{date.today()}.json'
+    try:
+        with open(filepath, 'w', encoding='utf-8') as f:
+            json.dump(stats, f, indent=4, ensure_ascii=False)
+            
+    except IOError as e:
+        raise e
+    
+    finally:
+        print(f'Stats saved to {filepath}')
 
 if __name__ == "__main__":
     test = get_playlist_id()
     video_ids = get_video_ids(test)
-    extract_video_stats(video_ids)
+    stats = extract_video_stats(video_ids)
+    save_stats_to_json(stats, 'video_stats')
