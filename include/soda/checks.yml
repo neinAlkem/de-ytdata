@@ -1,0 +1,17 @@
+checks for yt_api:
+  - missing_count(video_id) = 0
+  - duplicate_count(video_id) = 0
+
+  - likes_greater_than_views = 0:
+      name: "Like count should not be greater than view count"
+      likes_greater_than_views query:
+        SELECT COUNT(1) 
+        FROM yt_api
+        WHERE like_count > view_count
+
+  - comments_greater_than_views = 0:
+      name: "Comments count should not be greater than view count"
+      comments_greater_than_views query:
+        SELECT COUNT(1) 
+        FROM yt_api
+        WHERE comment_count > view_count
