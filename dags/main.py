@@ -2,6 +2,7 @@ from airflow import DAG
 import pendulum
 from datetime import datetime, timedelta
 from api.extract_video_stats import get_playlist_id, get_video_ids, extract_video_stats, save_stats_to_json
+from warehouse.dwh import stg_table, dbo_table
 
 local_timezone = pendulum.timezone("Asia/Jakarta")
 
@@ -32,3 +33,16 @@ with DAG(
     task_save_json = save_stats_to_json(task_get_stats, 'video_stats')
     
     task_get_playlist >> task_get_video_ids >> task_get_stats >> task_save_json
+    
+with DAG(
+    'update_db',
+    default_args=default_args,
+    description='Script to update database with video statistics from YouTube Data API',
+    schedule_interval='0 15 * * *',
+    catchup=False,
+) as dag:
+    
+    task_stg_table = stg_table()
+    task_dbo_table = dbo_table()
+    
+    task_stg_table >> task_dbo_table
