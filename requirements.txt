@@ -1,2 +1,4 @@
 requests
-psycopg2
+psycopg2-binary
+soda-core-postgres
+pytest
