@@ -22,9 +22,9 @@ def stg_table() -> None:
         
         for row in data:
             if len(table_ids) == 0:
-                insert_row(cur, conn, schema, row['video_id'], row['title'], row['published_at'], row['duration'], row['view_count'], row['like_count'], row['comment_count'])
+                insert_row(cur, conn, schema, [row['video_id'], row['title'], row['published_at'], row['duration'], row['view_count'], row['like_count'], row['comment_count']])
             elif row['video_id'] in table_ids:
-                update_row(cur, conn, schema, row['video_id'], row['title'], row['published_at'], row['duration'], row['view_count'], row['like_count'], row['comment_count'])
+                update_row(cur, conn, schema, [row['video_id'], row['title'], row['published_at'], row['duration'], row['view_count'], row['like_count'], row['comment_count']])
         
         ids_in_json = {row['video_id'] for row in data}
         ids_to_delete = set(table_ids) - ids_in_json
@@ -39,8 +39,8 @@ def stg_table() -> None:
         close_db_conn(conn, cur)
 
 @task
-def dwh_table() -> None:
-    schema = 'core'
+def dbo_table() -> None:
+    schema = 'dbo'
     conn, cur = None, None
     try:
         conn, cur = get_db_conn()
@@ -55,14 +55,14 @@ def dwh_table() -> None:
             current_video_ids.add(row['video_id'])
             if len(table_ids) == 0:
                 transform_row = transform_data(row)
-                insert_row(cur, conn, schema, row['video_id'], transform_row['title'], transform_row['published_at'], parse_duration(transform_row['duration']), transform_row['view_count'], transform_row['like_count'], transform_row['comment_count'])
+                insert_row(cur, conn, schema, [row['video_id'], transform_row['title'], transform_row['published_at'], (transform_row['duration']), transform_row['video_type'], transform_row['view_count'], transform_row['like_count'], transform_row['comment_count']])
             
             else:
                 transform_row = transform_data(row)
                 if row['video_id'] in table_ids:
-                    update_row(cur, conn, schema, row['video_id'], transform_row['title'], transform_row['published_at'], parse_duration(transform_row['duration']), transform_row['view_count'], transform_row['like_count'], transform_row['comment_count'])
+                    update_row(cur, conn, schema, [row['video_id'], transform_row['title'], transform_row['published_at'], transform_row['duration'], transform_row['video_type'], transform_row['view_count'], transform_row['like_count'], transform_row['comment_count']])
                 else:
-                    insert_row(cur, conn, schema, row['video_id'], transform_row['title'], transform_row['published_at'], parse_duration(transform_row['duration']), transform_row['view_count'], transform_row['like_count'], transform_row['comment_count'])
+                    insert_row(cur, conn, schema, [row['video_id'], transform_row['title'], transform_row['published_at'], transform_row['duration'], transform_row['video_type'], transform_row['view_count'], transform_row['like_count'], transform_row['comment_count']])
         
         ids_to_delete = set(table_ids) - current_video_ids
         if ids_to_delete:

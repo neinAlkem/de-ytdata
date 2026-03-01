@@ -25,6 +25,6 @@ def parse_duration(duration_str: str) -> timedelta:
 def transform_data(row) :
     duration_td = parse_duration(row['duration'])
     row['duration'] = (datetime.min + duration_td).time()
-    row['video_type'] = 'Short Video' if duration_td < timedelta(minutes=1) else 'Normal Video'
+    row['video_type'] = 'Shorts' if duration_td < timedelta(minutes=1) else 'Normal Video'
     
     return row

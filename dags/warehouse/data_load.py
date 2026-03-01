@@ -1,11 +1,11 @@
 import json
-from datetime import datetime
+from datetime import date
 import logging
 
 logger = logging.getLogger(__name__)
 
 def load_path() :
-    file_path = f'.data/video_stats_{datetime.now().strftime("%Y%m%d%H%M%S")}.json'
+    file_path = f'data/video_stats_{date.today()}.json'
     
     try: 
         logger.info(f'Processing video statistics data from API response, file: {file_path}')

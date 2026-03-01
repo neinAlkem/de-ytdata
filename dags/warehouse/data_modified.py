@@ -12,8 +12,8 @@ def insert_row(cur, conn, schema_name, row) -> None :
             """
         else:
             insert_query = f"""
-                INSERT INTO {schema_name}.{table} (video_id, title, published_at, duration, view_count, like_count, comment_count)
-                VALUES (%s, %s, %s, %s::time, %s, %s, %s)
+                INSERT INTO {schema_name}.{table} (video_id, title, published_at, duration, video_type, view_count, like_count, comment_count)
+                VALUES (%s, %s, %s, %s::time, %s, %s, %s, %s)
             """
         cur.execute(insert_query, row)
         conn.commit()
