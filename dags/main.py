@@ -3,6 +3,7 @@ import pendulum
 from datetime import datetime, timedelta
 from api.extract_video_stats import get_playlist_id, get_video_ids, extract_video_stats, save_stats_to_json
 from warehouse.dwh import stg_table, dbo_table
+from data_quality_check.soda import check_data_quality
 
 local_timezone = pendulum.timezone("Asia/Jakarta")
 
@@ -44,5 +45,18 @@ with DAG(
     
     task_stg_table = stg_table()
     task_dbo_table = dbo_table()
+    
+    task_stg_table >> task_dbo_table
+
+with DAG(
+    'data_quality_check',
+    default_args=default_args,
+    description='Data quality check using Soda for both layer',
+    schedule_interval='0 16 * * *',
+    catchup=False,
+) as dag:
+    
+    task_stg_table = check_data_quality('stg')
+    task_dbo_table = check_data_quality('dbo')
     
     task_stg_table >> task_dbo_table
