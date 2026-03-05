@@ -29,15 +29,15 @@ def update_row(cur, conn, schema_name, row) -> None:
             update_query = f"""
                 UPDATE {schema_name}.{table}
                 SET title = %s, view_count = %s, like_count = %s, comment_count = %s
-                WHERE video_id = %s AND duration = %s
+                WHERE video_id = %s
             """ 
         else:
             update_query = f"""
                 UPDATE {schema_name}.{table}
                 SET title = %s, view_count = %s, like_count = %s, comment_count = %s
-                WHERE video_id = %s AND duration = %s::time
+                WHERE video_id = %s 
             """
-        params = (row[1], row[4], row[5], row[6], row[0], row[3])
+        params = (row[1], row[5], row[6], row[7], row[1])
         cur.execute(update_query, params)
         conn.commit()
         logger.info(f"Updating row with video_id '{row[0]}' in schema '{schema_name}' successful.")
