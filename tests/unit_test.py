@@ -30,8 +30,8 @@ def test_dags_integration(dagbag):
     print(len(dagbag.dags))
     
     expected_taks_cound = {
-        'produce_video_stats': 4,
-        'update_db': 2,
+        'produce_video_stats': 5,
+        'update_db': 3,
         'data_quality_check': 2
     }
     print('=============')
