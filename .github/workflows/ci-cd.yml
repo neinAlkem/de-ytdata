@@ -85,13 +85,13 @@ jobs:
               run: sleep 40
             - name: run unit tests
               if: steps.changed-file-test.outputs.any_changed == 'true' || github.event_name == 'workflow_dispatch'
-              run: docker exec -it airflow-worker sh -c "pytest tests/ -v"
+              run: docker exec ***-airflow-worker sh -c "pytest tests/ -v"
             - name: run integration tests
               if: steps.changed-file-test.outputs.any_changed == 'true' || github.event_name == 'workflow_dispatch'
               run: |
                 DAG_NAMES=('produce_video_stats', 'update_db','data_quality_check')
                 for DAG in "${DAG_NAMES[@]}"; do
-                  docker exec -it airflow-worker sh -c "airflow dags test $DAG"
+                  docker exec ***-airflow-worker sh -c "airflow dags test $DAG"
                 done
             - name: teardown resource
               if: steps.changed-file-test.outputs.any_changed == 'true' || github.event_name == 'workflow_dispatch'
