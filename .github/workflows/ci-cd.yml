@@ -77,9 +77,9 @@ jobs:
             - name: set up docker compose
               if: steps.changed-file-test.outputs.any_changed == 'true' || github.event_name == 'workflow_dispatch'
               run: docker compose up -d
-            - name: wait airflow
-              if: steps.changed-file-test.outputs.any_changed == 'true' || github.event_name == 'workflow_dispatch'
-              run: sleep 40
+            # - name: wait airflow
+            #   if: steps.changed-file-test.outputs.any_changed == 'true' || github.event_name == 'workflow_dispatch'
+            #   run: sleep 40
             - name: run unit tests
               if: steps.changed-file-test.outputs.any_changed == 'true' || github.event_name == 'workflow_dispatch'
               run: docker exec airflow-worker sh -c "pytest tests/ -v"
