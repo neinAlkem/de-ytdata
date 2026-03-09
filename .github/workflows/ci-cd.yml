@@ -77,9 +77,10 @@ jobs:
             - name: set up docker compose
               if: steps.changed-file-test.outputs.any_changed == 'true' || github.event_name == 'workflow_dispatch'
               run: docker compose up -d
-            - name: Show postgres logs
-              if: always()
-              run: docker logs "${{ job.services.postgres.id }}"
+            - name: Debug containers
+              run: |
+               docker ps -a
+               docker compose logs
             # - name: wait airflow
             #   if: steps.changed-file-test.outputs.any_changed == 'true' || github.event_name == 'workflow_dispatch'
             #   run: sleep 40
