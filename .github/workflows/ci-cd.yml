@@ -76,7 +76,7 @@ jobs:
                     docker-compose.yaml
             - name: initialize airflow
               if: steps.changed-file-test.outputs.any_changed == 'true' || github.event_name == 'workflow_dispatch'
-              run: docker compose up airflow-init
+              run: docker compose up --abort-on-container-exit airflow-init
             - name: set up docker compose
               if: steps.changed-file-test.outputs.any_changed == 'true' || github.event_name == 'workflow_dispatch'
               run: docker compose up -d
