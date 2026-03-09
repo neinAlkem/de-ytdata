@@ -78,6 +78,7 @@ jobs:
               if: steps.changed-file-test.outputs.any_changed == 'true' || github.event_name == 'workflow_dispatch'
               run: docker compose up -d
             - name: Debug containers
+              if: always()
               run: |
                docker ps -a
                docker compose logs
