@@ -37,7 +37,7 @@ with DAG(
     trigger_update_db = TriggerDagRunOperator(
         task_id='trigger_update_db',
         trigger_dag_id='update_db',
-        wait_for_completion=True,
+        # wait_for_completion=True,
         reset_dag_run=True
     )
     
@@ -57,7 +57,7 @@ with DAG(
     trigger_data_qc = TriggerDagRunOperator(
         task_id='trigger_data_quality_check',
         trigger_dag_id='data_quality_check',
-        wait_for_completion=True,
+        # wait_for_completion=True,
         reset_dag_run=True
     )
     
