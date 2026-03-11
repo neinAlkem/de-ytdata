@@ -85,8 +85,8 @@ jobs:
                docker compose logs
             - name: setup airflow variables
               run: |
-                  airflow variables set CHANNEL_HANDLE ${{ vars.CHANNEL_HANDLE }}
-                  airflow variables set API_KEY ${{ secrets.API_KEY }}
+                  docker exec -it airflow-worker airflow variables set CHANNEL_HANDLE ${{ vars.CHANNEL_HANDLE }}
+                  docker exec -it airflow-worker airflow variables set API_KEY ${{ secrets.API_KEY }}
             - name: run unit tests
               if: steps.changed-file-test.outputs.any_changed == 'true' || github.event_name == 'workflow_dispatch'
               run: docker exec airflow-worker sh -c "pytest tests/ -v"
