@@ -3,7 +3,7 @@ import pytest
 
 def test_youtube_api_response(airflow_variable):
     api_key = airflow_variable('API_KEY')
-    channel_handler = airflow_variable('CHANNEL_HANDLER')
+    channel_handler = airflow_variable('CHANNEL_HANDLE')
     
     url = f"https://www.googleapis.com/youtube/v3/channels?part=contentDetails&forUsername={channel_handler}&key={api_key}"
     
