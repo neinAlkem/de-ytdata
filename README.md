@@ -53,13 +53,6 @@ The main objectives of this project are:
 - Applies basic transformations (duration parsing + video type labeling)
 - Runs **Soda SQL data quality checks** to validate the warehouse tables
 
-## Why this project is useful
-
-- **Automated collection** of YouTube channel analytics on a schedule
-- **Reproducible pipeline** using Docker + Airflow (scheduler + workers)
-- **Data quality validation** with Soda SQL checks (missing/duplicate counts, business rules)
-- **Extensible**: add new DAGs, transformations, or quality checks easily
-
 ## Project structure
 
 - `dags/` - Airflow DAG definitions (pipeline orchestration)
